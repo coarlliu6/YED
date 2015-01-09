@@ -91,7 +91,7 @@ int main()
 
  // intra-layer interaction:  
   double a = 0, b = 0, // for torus, no use here
-         c0 = 0, c1 = 1,  // for hard core interaction
+         c0 = 0, c1 = 1,  // for hard core interaction(fake Haldane interaction), 0th and 1st orders, respectively. The values are assign by us. 
          param[4] = {a, b, c0, c1};  
   int LLn = 0;
   char type[3];

@@ -11,8 +11,8 @@ double interaction::vl(int l, double Q)  // l: relative angular momentum; this i
    using namespace boost::math;
    using namespace std;
    double result;
-   double  R =1;  //radius of the sphere
-
+   double  R = sqrt(Q);  //radius of the sphere
+   cout << "Q = " << Q << "R = " << R << endl; 
    result = (2/R) * binomial_coefficient<double>(4*Q-2*l, 2*Q-l) * binomial_coefficient<double>(4*Q+ 2*l +2, 2*Q +l +1) / binomial_coefficient<double>(4*Q+2, 2*Q+1) / binomial_coefficient<double>(4*Q+2, 2*Q+1);  // V_L formula   
    
     return result;
@@ -26,15 +26,18 @@ double interaction::cgcs(int m1, int m2, int m, double Q)
   using namespace boost::math;
   using namespace std;
   double result = 0;
-
+  const double pi = boost::math::constants::pi<double>();
   int l1, l2, L, M, M1, M2;  // L: two times of the relative angular momentum; M:two times of the total angular momentum = m1+m2
-  M = (int) -2*(m1 + m2 - 2* Q);
+  M = (int) 2*(m1 + m2 - 2* Q);
   M1 = (int) 2*(m1 - Q);
   M2 = (int) 2*(m2 -  Q);
   l1 = (int) 2*Q; l2 = (int) 2*Q; L = 2*m;
+
+ // cout << "test :" << "l1, l2, L, -M1, -M2, M = " << l1 << " " << l2 << " " << L << " " << -M1 << " " << -M2 << " " << M << " " << " cgc = " << gsl_sf_coupling_3j(l1, l2, L, -M1, -M2, M) << endl;
+
+  result = pow(-1, 4*Q - m1 - m2 ) * pow(-1, 2*Q + m) * sqrt((2*Q+1)*(2*Q+1)*(2*m+1)/4/pi) * gsl_sf_coupling_3j(l1, l2, L, -M1, -M2, M) * gsl_sf_coupling_3j(l1, l2, L, 2*Q, 2*Q, -4*Q);
  
-  result = pow(-1, (l1 - l2 + M)/2) * sqrt(L + 1) * gsl_sf_coupling_3j(l1, l2, L, M1, M2, M);
-   cout << "cgc_" << l1 << l2 << L/2 << m1 << m2 << M/2 << " = " << result << endl;
+ // cout << "cgc_" << l1 << l2 << L/2 << m1 << m2 << M/2 << " = " << result << endl;
   return result;
 }
 
