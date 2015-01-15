@@ -202,7 +202,7 @@
   :END:
   [[file:matrix/countSize.cpp]]
 
-** countSize
+** estimateSize
    :PROPERTIES:
    :geometry: torus
    :END:

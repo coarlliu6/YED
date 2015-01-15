@@ -29,7 +29,8 @@ class basis
 {
   friend class matrix;
 private:
-  int n1, n2, nOrb, qn, s;  //n1 & n2:particle # for different spin components; nOrb: # of orbital; qn: total angular momentum; s: parameter for torus case.
+  int n1, n2, nOrb, s;  //n1 & n2:particle # for different spin components; nOrb: # of orbital; qn: total angular momentum; s: parameter for torus case.
+  double qn;
   char type;  //Choose case: disk(D), sphere(S) or torus(T) 
   long* bases;
   long* bCompare;
@@ -49,9 +50,10 @@ private:
   int biTBasisJudge(long b);
   int tGen();
 public:
-  basis(int n1_, int n2_, int nOrb_, int qn_, int s_, char type_);
+  basis(int n1_, int n2_, int nOrb_, double qn_, int s_, char type_);
   int bGen();
   void print();
+  void record();
 };
 
 #endif

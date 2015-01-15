@@ -35,7 +35,8 @@ private:
   char type[2];
   char matrixType;
   int n1, n2, nOrb;
-  int q, N, s, t;  // s: param for torus; t: total angular momentum
+  int N, s, t;  // s: param for torus; t: total angular momentum
+  double q;
   long dim;
   // asked data
   long* bases;

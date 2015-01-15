@@ -54,6 +54,7 @@ void interaction::itrGen()
 	    itrC[m1 * nOrb * nOrb + m2 * nOrb + m3] = tItr(m1, m2, m3);
       break;
      case 'S':
+       cout << "in itrGen(): YELLEW!!! " << endl; //TEST
        itr = new double[nOrb * nOrb * nOrb];
        for (m1 =0; m1 < nOrb; m1++)
          for (m2 = 0; m2 < nOrb; m2++)
@@ -80,6 +81,8 @@ void interaction::itrPrint(int m1, int m2, int m3)
     case 'D':
       cout << "(" << m1 << ", " << m2 << "|V|" << m3 << ", " << m1 + m2 - m3 << ") = " << dItr(m1, m2, m3) << endl;
       break;
+    case 'S':
+      cout << "(" << m1 << ", " << m2 << "|V|" << m3 << ", " << m1 + m2 - m3 << " ) = " << sItr(m1, m2, m3, Q) << endl;
     case 'T':
       cout << "(" << m1 << ", " << m2 << "|V|" << m3 << ", " << (m1 + m2 - m3 + nOrb) % nOrb << ") = " << tItr(m1, m2, m3) << endl;
       cout << "<" << m1 << ", " << m2 << "|V|" << m3 << ", " << m1 + m2 - m3 << "> = " << tItr(m1, m2, m3) - tItr(m1, m2, (m1 + m2 - m3 + nOrb) % nOrb) << endl;

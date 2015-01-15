@@ -24,7 +24,7 @@
 #include <algorithm>
 #include <complex>
 
-basis::basis(int n1_, int n2_, int nOrb_, int qn_, int s_, char type_)
+basis::basis(int n1_, int n2_, int nOrb_, double qn_, int s_, char type_)
 {
   n1 = n1_;
   n2 = n2_;
@@ -48,16 +48,13 @@ int basis::bGen()
   std::cout << "dim = " << dim << std::endl;
   return dim;
 }
+
 void basis::print()
 {
   using namespace std;
   int i;
   cout << "The generated bases are:" << endl;
   cout << "n1 = " << n1 << ", n2 = " << n2 << ", nOrb = " << nOrb << ", qn = "; 
-//  if(geometry == 'S')
-//    cout << qn_org << endl;
-//  else
-//    cout << qn << endl;
 
   cout << "------ from the large orbital to the small ------" << endl;
   for (i = 0; i < dim; i++)
@@ -73,3 +70,71 @@ void basis::print()
   cout << "dim = " << dim << endl;
 }
 
+void basis::record()
+{
+  using namespace std;
+  int i; 
+  int deciShift = (int) (pow(2, nOrb) + 0.5);
+  int dec1, dec2;
+  int dec;
+  int orb = nOrb - 1;  
+
+  std::ofstream fout("data.txt");
+ 
+  fout << "n1 =" << n1 << " " << "n2 =" << n2 << " " << "nOrb =" << nOrb << " " << "qn =" << qn << endl;
+  fout << "bases dim = " << dim << endl;   
+  fout << "bases are = " << endl;
+  fout << "num" << "  " << "deci num" << "  " << "dec1" << "    " << "dec2" << "  " << endl;
+  
+  for(i = 0; i < dim; i++ )
+     {
+        dec =bases[i];
+        dec1 = dec /deciShift;
+        dec2 = dec % deciShift;
+        
+        fout << i+1 <<  "      " << bases[i] <<  "      " << dec1 << "      " << dec2 << "      ";
+       
+        do 
+          { 
+            switch (dec1 % 2)
+               {
+                 case 1: 
+                    if (type == 'T')
+                      { fout << orb + 1 << " "; }
+                    else
+                      { fout << orb << " "; }
+                   
+                    orb--;
+                    break;
+                 case 0:
+                    orb--;
+                    break;
+               }
+           dec1 = dec1/2;
+          } while (orb >=0);
+       fout << "||";
+       orb = nOrb -1;
+       do
+         {
+           switch (dec2 % 2)
+             {
+                case 1:
+                       if (type == 'T')
+                          { fout << orb + 1 << " ";}
+                       else 
+                          { fout << orb << " ";}
+                       orb--;
+                       break;
+                case 0:
+                       orb--;
+                       break; 
+             }
+           dec2 = dec2/2;
+         } while (orb >= 0);       
+        
+        fout << "\n" ;
+      }
+ 
+  
+  fout.close();
+}

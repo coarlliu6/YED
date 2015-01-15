@@ -41,6 +41,9 @@ ED::ED(matrix m_, int wn_)
     case 'D':
       A = m_.A;
       break;
+    case 'S':
+      A = m_.A;
+      break;
     case 'T':
       AC = m_.AC;
       break;
@@ -81,6 +84,8 @@ void ED::arpackpp()
     }
   cout << endl;
   */
+//  cout << "type[0] (should be S) = " << type[0] << endl; //TEST
+
   switch (type[0])
     {
     case 'D':
@@ -93,6 +98,17 @@ void ED::arpackpp()
 	{
 	  EigValue[i] = EigValR[i];
 	}
+      break;
+    case 'S':
+      EigValR = new double[wn];
+      EigVecR = new double[wn * dim];
+      cout << "Before ED check: dim = " << dim << ", size = " << size << endl;
+      AREig(EigValR, EigVecR, dim, size, A, row, pcol, 'L', wn, "SM");
+      EigValue = new double[wn];
+      for (int i = 0; i < wn; i++ )
+        {
+          EigValue[i] = EigValR[i];
+        }
       break;
     case 'T':
       EigValC = new std::complex<double>[wn];

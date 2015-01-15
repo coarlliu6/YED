@@ -1,0 +1,6 @@
+geometry: S
+nOrb(2Q+1): 10
+n1: 0
+n2: 4
+qn: 0
+wn: 10

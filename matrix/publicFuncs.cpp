@@ -121,7 +121,7 @@ void matrix::mGen()
   //  int th_id;
   int pB1[n1], antiPB1[nOrb - n1], oB1[nOrb],
     pB2[n2], antiPB2[nOrb - n2], oB2[nOrb];
-  int rNo; //real nonzero matrix elements' no of a colum;
+  int rNo; //real nonzero matrix elements' no of a column;
   long ss = 0;
   //#pragma omp parallel for default(shared) private(th_id, rNo, pB1, antiPB1, oB1, pB2, antiPB2, oB2, rowTemp, ACTemp) reduction(+:ss) 
   for (int j = 0; j < dim; j++)

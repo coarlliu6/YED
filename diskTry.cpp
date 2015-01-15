@@ -26,10 +26,12 @@
 #include <iostream>
 #include <fstream>
 #include <time.h>
-
+#include <iomanip>  //std::setwi
+#include <sstream>
 std::string nameFileTool(std::string, int);
 std::string nameFileTool(std::string, double);
 
+void parameter_asg(char& geometry, int& n1, int& n2, int& nOrb, double& qn, int& wn);
 
 int main()
 {
@@ -42,34 +44,48 @@ int main()
   clock_t timeStart;
   timeStart = clock();
   cout << "start time: " << (double)(timeStart)/CLOCKS_PER_SEC/timeDivider << "hr" << endl;
-  int nOrb;
+  int nOrb =0;
   int s = 0; // this parameter is for torus, no use here
   // basis:
-  int n1 =0, n2, // if it just has one component, make n1 = 0
-    qn, qn_org,   // total angular momentum 
-    wn;
+  int n1 =0, n2=0; // if it just has one component, make n1 = 0
+  double  qn=0, qn_org=0;   // total angular momentum 
+  int  wn;
   double Q = 0; // B field stregth for monople at origin in sphere case.
   int dimbasis;
   char geometry;
+  int ip = 0;
+   
+   cout << "1) input parameters by hands; 2) automatically input parameters?" << endl;
+   cin >> ip;
 
-  cout << "Geometry? [D(isk), S(phere)]" << endl;
-  cin >> geometry;
-  cout <<"Orbital number(for S: 2Q+1) = " << endl;
-  cin >> nOrb;  
-  cout << "Particle number(n1, default=0) = " << endl;
-  cin >> n1;
-  cout << "Particle number(n2) = " << endl;
-  cin >> n2;
-  cout << "Total angular momentum = " << endl;
-  cin >> qn;
-  cout << "The number of lowest energies do you want = " << endl;
-  cin >> wn;
- 
+   switch(ip)
+     {
+       case 1:
+              cout << "Geometry? [D(isk), S(phere)]" << endl;
+              cin >> geometry;
+              cout <<"Orbital number(for S: 2Q+1) = " << endl;
+              cin >> nOrb;  
+              cout << "Particle number(n1, default=0) = " << endl;
+              cin >> n1;
+              cout << "Particle number(n2) = " << endl;
+              cin >> n2;
+              cout << "Total angular momentum = " << endl;
+              cin >> qn;
+              cout << "The number of lowest energies do you want = " << endl;
+              cin >> wn;
+              break;
+
+       case 2:
+              parameter_asg(geometry, n1, n2, nOrb, qn, wn);
+              break;
+     }
+ // cout << "geometry, nOrb, n1, n2, qn, wn =  " << geometry << " " << nOrb << " " << n1 << " " << n2 << " " << qn << " " << wn << endl;
   qn_org = qn;
 
   if (geometry == 'S')
-    { Q = (nOrb - 1)/2;
-      qn_org += (n1 + n2) * (nOrb - 1) / 2; 
+    { 
+      Q = (double)(nOrb - 1)/2;
+      qn_org += (n1 + n2) * Q;
     }  
  
   basis bases(n1, n2, nOrb, qn_org, s, geometry);
@@ -78,8 +94,8 @@ int main()
   clock_t timeBasis;
   timeBasis = clock();
   cout << "basis finished time: " << (double)(timeBasis)/CLOCKS_PER_SEC/timeDivider << "hr" << endl;
-  bases.print();
-
+//  bases.print();
+  bases.record();
   if (wn < dimbasis)  // due to wn < dim
     {
        cout << "wn = " << wn << endl;
@@ -96,7 +112,7 @@ int main()
   int LLn = 0;
   char type[3];
        type[0]= geometry;
-       type[1]='H';
+       type[1]='C';
    
   interaction itrA(nOrb, LLn, param, type, Q);
   itrA.itrGen();
@@ -111,19 +127,57 @@ int main()
  // generate matrix
   char sizeCountType = 'C';
   char matrixType = 'l'; // w: whole; l: low part
-  matrix m(bases, itrA, itrR, matrixType, sizeCountType, qn, s);
+  matrix m(bases, itrA, itrR, matrixType, sizeCountType, qn_org, s);
   m.mGen();
   m.print();
 
- // cout<< "finish matrix generation"<<endl;
+ cout<< "finish matrix generation"<<endl;
 
   // ED
   ED ed(m, wn);
   ed.arpackpp();
   ed.terminalOP();
-   ed.terminalVectorOP();
+  ed.terminalVectorOP();
   cout << "==============================================================" << endl;
   cout << "==============================================================" << endl;
+}
+
+void parameter_asg(char& geometry, int& n1, int& n2, int& nOrb, double& qn, int& wn)
+{
+   using namespace std;
+   
+   char useless[20];
+   char chr;
+
+   string line;
+   istringstream in;
+   ifstream fin;
+   fin.open ("parameter.txt");
+   if(!fin)
+     { cout << "Fail to open parameter.txt" << endl;}
+
+   fin.getline(useless, 20, ' ');
+   fin >> geometry;
+   fin.get(chr);
+  // cout << "geometry = " << geometry << endl;
+
+   fin.getline(useless, 20, ' ');
+   fin >> nOrb;
+  // cout << "nOrb = " << nOrb << endl;
+   fin.getline(useless, 20, ' ');
+   fin >> n1;
+  // cout << "n1 = " << n1 << endl;
+   fin.getline(useless, 20, ' ');
+   fin >> n2;
+  // cout << "n2 = " << n2 << endl;
+   fin.getline(useless, 20 , ' ');
+   fin >> qn;
+  // cout << "qn = " << qn << endl;
+   fin.getline(useless, 20, ' ');
+   fin >> wn;
+  // cout << "wn = " << wn << endl;
+ 
+   fin.close();
 }
 
 std::string nameFileTool(std::string p, int pn)
