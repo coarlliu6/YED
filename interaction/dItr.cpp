@@ -71,6 +71,8 @@ double interaction::dItr(int m1, int m2, int m3)
     case 'C':
       for (int m = 0; m <= m1 + m2; m++)
 	result += cgc(m3, m4, m) * vm(m) * cgc(m1, m2, m);
+
+       // cout << "result = " << result << endl;
       break;
     case 'H':
       for (int m = 0; m <= 1; m++)

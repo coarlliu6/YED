@@ -129,7 +129,7 @@ int main()
   char matrixType = 'l'; // w: whole; l: low part
   matrix m(bases, itrA, itrR, matrixType, sizeCountType, qn_org, s);
   m.mGen();
-  m.print();
+ // m.print();
 
  cout<< "finish matrix generation"<<endl;
 
@@ -137,7 +137,7 @@ int main()
   ED ed(m, wn);
   ed.arpackpp();
   ed.terminalOP();
-  ed.terminalVectorOP();
+  //ed.terminalVectorOP();
   cout << "==============================================================" << endl;
   cout << "==============================================================" << endl;
 }
@@ -159,23 +159,16 @@ void parameter_asg(char& geometry, int& n1, int& n2, int& nOrb, double& qn, int&
    fin.getline(useless, 20, ' ');
    fin >> geometry;
    fin.get(chr);
-  // cout << "geometry = " << geometry << endl;
-
    fin.getline(useless, 20, ' ');
    fin >> nOrb;
-  // cout << "nOrb = " << nOrb << endl;
    fin.getline(useless, 20, ' ');
    fin >> n1;
-  // cout << "n1 = " << n1 << endl;
    fin.getline(useless, 20, ' ');
    fin >> n2;
-  // cout << "n2 = " << n2 << endl;
    fin.getline(useless, 20 , ' ');
    fin >> qn;
-  // cout << "qn = " << qn << endl;
    fin.getline(useless, 20, ' ');
    fin >> wn;
-  // cout << "wn = " << wn << endl;
  
    fin.close();
 }

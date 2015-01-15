@@ -54,7 +54,6 @@ void interaction::itrGen()
 	    itrC[m1 * nOrb * nOrb + m2 * nOrb + m3] = tItr(m1, m2, m3);
       break;
      case 'S':
-       cout << "in itrGen(): YELLEW!!! " << endl; //TEST
        itr = new double[nOrb * nOrb * nOrb];
        for (m1 =0; m1 < nOrb; m1++)
          for (m2 = 0; m2 < nOrb; m2++)
